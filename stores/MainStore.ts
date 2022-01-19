@@ -32,6 +32,18 @@ class MainStoreC {
     setInvestMoney(investMoney: number) {
         this.investMoney = investMoney;
     }
+
+    // --------- Need Goes --------- //
+    @persist needGoes: number = 0;
+    setNeedGoes(needGoes: number) {
+        this.needGoes = needGoes;
+    }
+
+    // --------- Need Goes --------- //
+    @persist enjoyGoes: number = 0;
+    setEnjoyGoes(enjoyGoes: number) {
+        this.enjoyGoes = enjoyGoes;
+    }
 }
 
 const hydrate = create({ storage: AsyncStorage });

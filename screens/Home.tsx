@@ -2,32 +2,187 @@ import React from "react";
 import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MainStore } from "../stores/MainStore";
-import { Button } from "native-base";
+import { Button, Input, Icon } from "native-base";
+import { AntDesign } from "@expo/vector-icons";
 
 const Home = () => {
 
+
     const [modal, setModal] = React.useState(false);
+    const [modalFirst, setModalFirst] = React.useState(false);
     const [whichBalance, setWhichBalance] = React.useState(0); // 1-need, 2-enjoy, 3-saving, 4-investment
+    const [addSubtract, setAddSubtract] = React.useState(2); // 1-add, 2-substract
+    const [money, setMoney] = React.useState(0);
+
+    // --- BALANCES --- //
+    const [need, setNeed] = React.useState(MainStore.needMoney);
+    const [enjoy, setEnjoy] = React.useState(MainStore.enjoyMoney);
+    const [savings, setSavings] = React.useState(MainStore.savingsMoney);
+    const [invest, setInvest] = React.useState(MainStore.investMoney);
+
+    // --- FIRST SETTINGS --- ///
+    const setFirstBalance = () => {
+        MainStore.setEnjoyMoney(enjoy)
+        MainStore.setNeedMoney(need)
+        MainStore.setSavingsMoney(savings)
+        MainStore.setInvestMoney(invest)
+    }
+
+    // --- ADD SUBSTRACT FUNCTION --- //
+    const addSubtractf = () => {
+        console.log(typeof money)
+        //money,whichBalance,addSubtract
+        switch (whichBalance) {
+            case 1: {
+                if (addSubtract == 1) {
+                    MainStore.setNeedMoney(MainStore.needMoney + money)
+                } else {
+                    MainStore.setNeedMoney(MainStore.needMoney - money)
+                }
+                break;
+            }
+            case 2: {
+                if (addSubtract == 1) {
+                    MainStore.setEnjoyMoney(MainStore.enjoyMoney + money)
+                } else {
+                    MainStore.setEnjoyMoney(MainStore.enjoyMoney - money)
+                }
+                break;
+            }
+            case 3: {
+                if (addSubtract == 1) {
+                    MainStore.setSavingsMoney(MainStore.savingsMoney + money)
+                } else {
+                    MainStore.setSavingsMoney(MainStore.savingsMoney - money)
+                }
+                break;
+            }
+            case 4: {
+                if (addSubtract == 1) {
+                    MainStore.setInvestMoney(MainStore.investMoney + money)
+                } else {
+                    MainStore.setInvestMoney(MainStore.investMoney - money)
+                }
+                break;
+            }
+        }
+
+    }
 
     return (
         <SafeAreaView style={styles.main}>
+            {/* FIRST SETTINGS MODAL */}
+            <Modal
+                visible={modalFirst}
+                transparent={true}
+            >
+                <View style={styles.modal_first}>
+                    <View style={styles.modal_view_first}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setModalFirst(false)
+                            }}
+                            style={styles.x_touch_first}
+                        >
+                            <Text style={styles.x_text_first}>×</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.title_first}>Tüm hesaplarınızın ilk durumunu giriniz.</Text>
+
+                        {/* NEED AND ENJOY */}
+                        <View style={styles.input_view_first}>
+                            <Input
+                                marginTop={5}
+                                keyboardType="numeric"
+                                marginRight={2.5}
+                                width={'30%'}
+                                backgroundColor={'#cb997e'}
+                                placeholder="İhtiyaç Hesap"
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setNeed(parseFloat(text))
+                                }}
+                            />
+                            <Input
+                                marginTop={5}
+                                keyboardType="numeric"
+                                marginLeft={2.5}
+                                width={'30%'}
+                                backgroundColor={'#709655'}
+                                placeholder="Şahsi Hesap"
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setEnjoy(parseFloat(text))
+                                }}
+                            />
+                        </View>
+
+                        {/* SAVINGS AND INVEST */}
+                        <View style={styles.input_view_first}>
+                            <Input
+                                marginTop={5}
+                                marginRight={2.5}
+                                width={'30%'}
+                                keyboardType="numeric"
+                                backgroundColor={'#A5A58D'}
+                                placeholder="Birikim Hesabı"
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setSavings(parseFloat(text))
+                                }}
+                            />
+                            <Input
+                                marginTop={5}
+                                marginLeft={2.5}
+                                width={'30%'}
+                                keyboardType="numeric"
+                                backgroundColor={'#f67290'}
+                                placeholder="Yatırım Hesabı"
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setInvest(parseFloat(text))
+                                }}
+                            />
+                        </View>
+                        <Button
+                            onPress={() => {
+                                setFirstBalance();
+                                setModalFirst(false);
+                            }}
+                            style={styles.modal_complete_button}
+                        >
+                            <Text style={styles.modal_complete_text}>Hesapla</Text>
+                        </Button>
+                    </View>
+                </View>
+            </Modal>
+
+
             {/* SET BALANCE MODAL */}
             <Modal
                 visible={modal}
                 transparent={true}
             >
-                <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.8)', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={styles.modal}>
 
-                    <View style={{ height: '50%', width: '90%', backgroundColor: '#f4f4f4', alignItems: 'center', padding: 10, borderRadius: 10, elevation: 10 }}>
+                    <View style={styles.modal_view}>
                         <TouchableOpacity
                             onPress={() => {
                                 setModal(false)
+                                setAddSubtract(0)
                             }}
-                            style={{ position: 'absolute', right: 20, top: 5 }}
+                            style={styles.x_touch}
                         >
-                            <Text style={{ fontSize: 40, fontWeight: 'bold' }}>×</Text>
+                            <Text style={styles.x_text}>×</Text>
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>
+                        <Text style={styles.which_balance}>
                             {
                                 whichBalance == 1 ? "İhtiyaç Hesap" :
                                     whichBalance == 2 ? "Şahsi Hesap" :
@@ -35,16 +190,62 @@ const Home = () => {
                                             "Yatırım Hesabı"
                             }
                         </Text>
-                        <Text style={{ marginTop: 5 }}>Para Eklemek mi istiyorsunuz yoksa çıkarmak mı?</Text>
-                        <View style={{ flexDirection: 'row', width: '40%', justifyContent: 'space-between',marginTop:5 }}>
-                            <Button style={{ backgroundColor: '#709655' }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Eklemek</Text>
+
+                        {/* WHAT'S YOUR PREFER */}
+                        <Text style={styles.whats_your_prefer}>Para Eklemek mi istiyorsunuz yoksa çıkarmak mı?</Text>
+                        <View style={styles.modal_button_view}>
+                            {/* ADD BALANCE */}
+                            <Button
+                                onPress={() => {
+                                    setAddSubtract(1)
+                                }}
+                                style={{ backgroundColor: '#709655' }}
+                            >
+                                <Text style={styles.modal_button_text}>Eklemek</Text>
                             </Button>
-                            <Button style={{ backgroundColor: '#c4302b' }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Çıkarmak</Text>
+
+
+                            {/* EXIST BALANCE */}
+                            <Button
+                                onPress={() => {
+                                    setAddSubtract(2)
+                                }}
+                                style={{ backgroundColor: '#c4302b' }}
+                            >
+                                <Text style={styles.modal_button_text}>Çıkarmak</Text>
                             </Button>
                         </View>
-
+                        {
+                            addSubtract != 0 ?
+                                <>
+                                    <Input
+                                        borderRadius={20}
+                                        marginTop={3}
+                                        width={20}
+                                        keyboardType="numeric"
+                                        color={'#000'}
+                                        placeholderTextColor={'#808080'}
+                                        textAlign={'center'}
+                                        borderColor={addSubtract == 1 ? '#709655' : '#c4302b'}
+                                        borderWidth={2}
+                                        placeholder="Tutar"
+                                        onChangeText={(text: any) => {
+                                            setMoney(parseFloat(text))
+                                        }}
+                                    />
+                                    <Button
+                                        onPress={() => {
+                                            addSubtractf()
+                                            setModal(false)
+                                        }}
+                                        style={styles.modal_complete_button}
+                                    >
+                                        <Text style={styles.modal_complete_text}>Hesapla</Text>
+                                    </Button>
+                                </>
+                                :
+                                <></>
+                        }
                     </View>
                 </View>
             </Modal>
@@ -55,6 +256,17 @@ const Home = () => {
                     style={styles.logo}
                     source={require('../assets/home/logo.png')}
                 />
+                <TouchableOpacity
+                    onPress={() => {
+                        setModalFirst(true)
+                    }}
+                    style={{ position: 'absolute', right: 10 }}
+                >
+                    <Icon
+                        as={AntDesign}
+                        name='setting'
+                    />
+                </TouchableOpacity>
             </View>
 
             {/* GRAY LINE */}
@@ -116,11 +328,11 @@ const Home = () => {
                 <View style={styles.bottom_area}>
                     <View style={styles.flex_row}>
                         <Text style={styles.left_text}>Toplam birikiminiz</Text>
-                        <Text style={styles.right_text_success}>: +400₺</Text>
+                        <Text style={styles.right_text_success}>: +{MainStore.savingsMoney}₺</Text>
                     </View>
                     <View style={styles.flex_row_v2}>
                         <Text style={styles.left_text}>Toplam Yatırımınız</Text>
-                        <Text style={styles.right_text_success}>: +400₺</Text>
+                        <Text style={styles.right_text_success}>: +{MainStore.investMoney}₺</Text>
                     </View>
                     <View style={styles.flex_row_v2}>
                         <Text style={styles.left_text}>Toplam Giderler</Text>
@@ -142,6 +354,85 @@ const Home = () => {
 export default Home;
 
 const styles = StyleSheet.create({
+    modal_first: {
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    modal_view_first: {
+        width: '90%',
+        backgroundColor: '#f4f4f4',
+        alignItems: 'center',
+        paddingVertical: 50,
+        borderRadius: 10,
+        elevation: 10
+    },
+    x_touch_first: {
+        position: 'absolute',
+        right: 0,
+        top: -10,
+        padding: 15
+    },
+    x_text_first: {
+        fontSize: 40,
+        fontWeight: 'bold'
+    },
+    title_first: { fontWeight: 'bold' },
+    input_view_first: { flexDirection: 'row' },
+    modal: {
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    modal_view: {
+        width: '90%',
+        backgroundColor: '#f4f4f4',
+        alignItems: 'center',
+        paddingVertical: 50,
+        borderRadius: 10,
+        elevation: 10
+    },
+    x_touch: {
+        position: 'absolute',
+        right: 0,
+        top: -10,
+        padding: 15
+    },
+    x_text: {
+        fontSize: 40,
+        fontWeight: 'bold'
+    },
+    which_balance: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginTop: 20
+    },
+    whats_your_prefer: {
+        marginTop: 5,
+        textAlign: 'center'
+    },
+    modal_button_view: {
+        flexDirection: 'row',
+        width: '40%',
+        justifyContent: 'space-between',
+        marginTop: 5
+    },
+    modal_button_text: {
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    modal_complete_button: {
+        width: '70%',
+        height: 50,
+        marginTop: 20,
+        backgroundColor: '#5a7b5b'
+    },
+    modal_complete_text: {
+        fontWeight: 'bold',
+        color: 'white'
+    },
     main: {
         flexGrow: 1,
         backgroundColor: '#f4f4f4'
@@ -177,12 +468,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: 18,
+        color:'white'
     },
     money: {
         fontWeight: 'bold',
         fontSize: 18,
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
+        color:'white'
     },
     bottom_area: {
         margin: 20,

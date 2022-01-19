@@ -1,3 +1,9 @@
+/*
+        RMFinance  started by Mehmet Ali YILGIN.
+    DESC: Mobile application that keeps financial status.
+            SOFTWARE ENGINEER: Mehmet Ali YILGIN
+*/
+
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NativeBaseProvider } from "native-base";

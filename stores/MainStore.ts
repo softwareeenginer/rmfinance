@@ -5,27 +5,33 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 configure({ enforceActions: "never" });
 
 class MainStoreC {
-  constructor() {
-    makeAutoObservable(this);
-  }
+    constructor() {
+        makeAutoObservable(this);
+    }
 
-  // --------- Token --------- //
-  @persist token: string | null = null;
-  setToken(token: string) {
-    this.token = token;
-  }
+    // --------- Need Money --------- //
+    @persist needMoney: number = 0;
+    setNeedMoney(needMoney: number) {
+        this.needMoney = needMoney;
+    }
 
-  // --------- User --------- //
-  @observable user : object | any = {};
-  setUser(user: object ){
-    this.user = user;
-  }
+    // --------- Enjoy Money --------- //
+    @persist enjoyMoney: number = 0;
+    setEnjoyMoney(enjoyMoney: number) {
+        this.enjoyMoney = enjoyMoney;
+    }
 
-   // --------- Language --------- //
-  @persist language : string | null = "";
-  setLanguage(set : string){
-    this.language = set;
-  }
+    // --------- Savings Money --------- //
+    @persist savingsMoney: number = 0;
+    setSavingsMoney(savingsMoney: number) {
+        this.savingsMoney = savingsMoney;
+    }
+
+    // --------- Invest Money --------- //
+    @persist investMoney: number = 0;
+    setInvestMoney(investMoney: number) {
+        this.investMoney = investMoney;
+    }
 }
 
 const hydrate = create({ storage: AsyncStorage });
@@ -33,10 +39,9 @@ const hydrate = create({ storage: AsyncStorage });
 export const MainStore = new MainStoreC();
 
 hydrate("MainStore", MainStore).then(() => {
-  console.log(
-    "********** -- MRFinance -- **********"+"\n"+
-    "********** --         -- **********"+"\n"+
-    "********** -- Software Engineer = Mehmet Ali YILGIN"+"\n"+"\n"
+    console.log(
+        "********** -- MRFinance -- **********" + "\n" +
+        "********** -- Software Engineer = Mehmet Ali YILGIN" + "\n" + "\n"
     );
-  console.log("Store has been hydarated!");
+    console.log("Store has been hydarated!");
 });

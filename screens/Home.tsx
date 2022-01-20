@@ -19,6 +19,8 @@ const Home = () => {
     const [enjoy, setEnjoy] = React.useState(MainStore.enjoyMoney);
     const [savings, setSavings] = React.useState(MainStore.savingsMoney);
     const [invest, setInvest] = React.useState(MainStore.investMoney);
+    const [needGoes, setNeedGoes] = React.useState(MainStore.needGoes);
+    const [enjoyGoes, setEnjoyGoes] = React.useState(MainStore.enjoyGoes);
 
     // --- FIRST SETTINGS --- ///
     const setFirstBalance = () => {
@@ -26,6 +28,8 @@ const Home = () => {
         MainStore.setNeedMoney(need)
         MainStore.setSavingsMoney(savings)
         MainStore.setInvestMoney(invest)
+        MainStore.setNeedGoes(needGoes)
+        MainStore.setEnjoyGoes(enjoyGoes)
     }
 
     // --- ADD SUBSTRACT FUNCTION --- //
@@ -38,6 +42,7 @@ const Home = () => {
                     MainStore.setNeedMoney(MainStore.needMoney + money)
                 } else {
                     MainStore.setNeedMoney(MainStore.needMoney - money)
+                    MainStore.setNeedGoes(MainStore.needGoes + money)
                 }
                 break;
             }
@@ -46,6 +51,7 @@ const Home = () => {
                     MainStore.setEnjoyMoney(MainStore.enjoyMoney + money)
                 } else {
                     MainStore.setEnjoyMoney(MainStore.enjoyMoney - money)
+                    MainStore.setEnjoyGoes(MainStore.enjoyGoes + money)
                 }
                 break;
             }
@@ -69,6 +75,9 @@ const Home = () => {
 
     }
 
+    // ----- SCORE ----- // 
+    const total = (MainStore.investMoney + MainStore.savingsMoney + MainStore.needMoney + MainStore.enjoyMoney)
+
     return (
         <SafeAreaView style={styles.main}>
             {/* FIRST SETTINGS MODAL */}
@@ -87,6 +96,7 @@ const Home = () => {
                             <Text style={styles.x_text_first}>×</Text>
                         </TouchableOpacity>
                         <Text style={styles.title_first}>Tüm hesaplarınızın ilk durumunu giriniz.</Text>
+                        <Text style={styles.title_first_warn}>UYARI! Önceden girilmiş verileri girmenize gerek yoktur!</Text>
 
                         {/* NEED AND ENJOY */}
                         <View style={styles.input_view_first}>
@@ -94,7 +104,7 @@ const Home = () => {
                                 marginTop={5}
                                 keyboardType="numeric"
                                 marginRight={2.5}
-                                width={'30%'}
+                                width={'35%'}
                                 backgroundColor={'#cb997e'}
                                 placeholder="İhtiyaç Hesap"
                                 placeholderTextColor={'white'}
@@ -108,7 +118,7 @@ const Home = () => {
                                 marginTop={5}
                                 keyboardType="numeric"
                                 marginLeft={2.5}
-                                width={'30%'}
+                                width={'35%'}
                                 backgroundColor={'#709655'}
                                 placeholder="Şahsi Hesap"
                                 placeholderTextColor={'white'}
@@ -125,7 +135,7 @@ const Home = () => {
                             <Input
                                 marginTop={5}
                                 marginRight={2.5}
-                                width={'30%'}
+                                width={'35%'}
                                 keyboardType="numeric"
                                 backgroundColor={'#A5A58D'}
                                 placeholder="Birikim Hesabı"
@@ -139,7 +149,7 @@ const Home = () => {
                             <Input
                                 marginTop={5}
                                 marginLeft={2.5}
-                                width={'30%'}
+                                width={'35%'}
                                 keyboardType="numeric"
                                 backgroundColor={'#f67290'}
                                 placeholder="Yatırım Hesabı"
@@ -148,6 +158,38 @@ const Home = () => {
                                 color={'white'}
                                 onChangeText={(text: any) => {
                                     setInvest(parseFloat(text))
+                                }}
+                            />
+                        </View>
+
+                        {/* DEFAULT GOES */}
+                        <View style={styles.input_view_first}>
+                            <Input
+                                marginTop={5}
+                                marginRight={2.5}
+                                width={'35%'}
+                                keyboardType="numeric"
+                                backgroundColor={'#c4302b'}
+                                placeholder="Önceki İhtiyaç Gider Top."
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setNeedGoes(parseFloat(text))
+                                }}
+                            />
+                            <Input
+                                marginTop={5}
+                                marginLeft={2.5}
+                                width={'35%'}
+                                keyboardType="numeric"
+                                backgroundColor={'#c4302b'}
+                                placeholder="Önceki Şahsi Gider Top."
+                                placeholderTextColor={'white'}
+                                borderRadius={10}
+                                color={'white'}
+                                onChangeText={(text: any) => {
+                                    setEnjoyGoes(parseFloat(text))
                                 }}
                             />
                         </View>
@@ -260,7 +302,7 @@ const Home = () => {
                     onPress={() => {
                         setModalFirst(true)
                     }}
-                    style={{ position: 'absolute', right: 10 }}
+                    style={styles.setting_touch}
                 >
                     <Icon
                         as={AntDesign}
@@ -285,7 +327,7 @@ const Home = () => {
                         style={[styles.box_view, { backgroundColor: '#cb997e' }]}
                     >
                         <Text style={styles.title}>İhtiyaç Hesap</Text>
-                        <Text style={styles.money}>{MainStore.needMoney}₺</Text>
+                        <Text style={styles.money}>{MainStore.needMoney.toFixed(2)}₺</Text>
                     </TouchableOpacity>
 
                     {/* ENJOY ACCOUNT BOX */}
@@ -297,7 +339,7 @@ const Home = () => {
                         style={[styles.box_view, { backgroundColor: '#eddcd2' }]}
                     >
                         <Text style={styles.title}>Şahsi Hesap</Text>
-                        <Text style={styles.money}>{MainStore.enjoyMoney}₺</Text>
+                        <Text style={styles.money}>{MainStore.enjoyMoney.toFixed(2)}₺</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.money_general}>
@@ -310,7 +352,7 @@ const Home = () => {
                         style={[styles.box_view, { backgroundColor: '#A5A58D' }]}
                     >
                         <Text style={styles.title}>Birikim Hesabı</Text>
-                        <Text style={styles.money}>{MainStore.savingsMoney}₺</Text>
+                        <Text style={styles.money}>{MainStore.savingsMoney.toFixed(2)}₺</Text>
                     </TouchableOpacity>
 
                     {/* INVEST ACCOUNT BOX */}
@@ -322,29 +364,35 @@ const Home = () => {
                         style={[styles.box_view, { backgroundColor: '#f67290' }]}
                     >
                         <Text style={styles.title}>Yatırım Hesabı</Text>
-                        <Text style={styles.money}>{MainStore.investMoney}₺</Text>
+                        <Text style={styles.money}>{MainStore.investMoney.toFixed(2)}₺</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.bottom_area}>
                     <View style={styles.flex_row}>
                         <Text style={styles.left_text}>Toplam birikiminiz</Text>
-                        <Text style={styles.right_text_success}>: +{MainStore.savingsMoney}₺</Text>
+                        <Text style={styles.right_text_success}>: +{MainStore.savingsMoney.toFixed(2)}₺</Text>
                     </View>
                     <View style={styles.flex_row_v2}>
                         <Text style={styles.left_text}>Toplam Yatırımınız</Text>
-                        <Text style={styles.right_text_success}>: +{MainStore.investMoney}₺</Text>
-                    </View>
-                    <View style={styles.flex_row_v2}>
-                        <Text style={styles.left_text}>Toplam Giderler</Text>
-                        <Text style={styles.right_text_fatal}>: -400₺</Text>
+                        <Text style={styles.right_text_success}>: +{MainStore.investMoney.toFixed(2)}₺</Text>
                     </View>
                     <View style={styles.flex_row_v2}>
                         <Text style={styles.left_text}>Şahsi Giderler</Text>
-                        <Text style={styles.right_text_fatal}>: -400₺</Text>
+                        <Text style={styles.right_text_fatal}>: -{MainStore.enjoyGoes.toFixed(2)}₺</Text>
                     </View>
                     <View style={styles.flex_row_v2}>
                         <Text style={styles.left_text}>İhtiyaç Giderler</Text>
-                        <Text style={styles.right_text_fatal}>: -400₺</Text>
+                        <Text style={styles.right_text_fatal}>: -{MainStore.needGoes.toFixed(2)}₺</Text>
+                    </View>
+                    <View style={styles.flex_row_v2}>
+                        <Text style={styles.left_text}>Toplam Giderler</Text>
+                        <Text style={styles.right_text_fatal}>: -{MainStore.needGoes + MainStore.enjoyGoes}₺</Text>
+                    </View>
+                </View>
+                <View style={styles.total_view}>
+                    <Text style={styles.total_text}>Toplam Varlığınız</Text>
+                    <View style={styles.total_shows_view}>
+                        <Text style={styles.total}> {total.toFixed(2)} ₺</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -379,6 +427,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     title_first: { fontWeight: 'bold' },
+    title_first_warn: { color: 'red' },
     input_view_first: { flexDirection: 'row' },
     modal: {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -424,7 +473,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     modal_complete_button: {
-        width: '70%',
+        width: '50%',
         height: 50,
         marginTop: 20,
         backgroundColor: '#5a7b5b'
@@ -445,6 +494,10 @@ const styles = StyleSheet.create({
     logo: {
         height: 40,
         width: 40
+    },
+    setting_touch: {
+        position: 'absolute',
+        right: 10
     },
     gray_line: {
         height: 1,
@@ -469,13 +522,13 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         fontSize: 18,
-        color:'white'
+        color: 'white'
     },
     money: {
         fontWeight: 'bold',
         fontSize: 18,
         alignSelf: 'flex-end',
-        color:'white'
+        color: 'white'
     },
     bottom_area: {
         margin: 20,
@@ -506,5 +559,25 @@ const styles = StyleSheet.create({
         fontSize: 20,
         width: '20%',
         color: 'green'
+    },
+    total_view: { alignItems: 'center' },
+    total_text: {
+        fontWeight: 'bold',
+        color: '#808080',
+        fontSize: 22
+    },
+    total_shows_view: {
+        borderRadius: 100,
+        backgroundColor: '#427330',
+        width: 120,
+        height: 120,
+        marginTop: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    total: {
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 22
     }
 });

@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image, ScrollView, TouchableOpacity, Modal } fr
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MainStore } from "../stores/MainStore";
 import { Button, Input, Icon } from "native-base";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 
 const Home = () => {
 
@@ -328,6 +328,13 @@ const Home = () => {
                     >
                         <Text style={styles.title}>İhtiyaç Hesap</Text>
                         <Text style={styles.money}>{MainStore.needMoney.toFixed(2)}₺</Text>
+                        <Icon
+                            as={AntDesign}
+                            name='smileo'
+                            size={20}
+                            color={'white'}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
 
                     {/* ENJOY ACCOUNT BOX */}
@@ -340,6 +347,13 @@ const Home = () => {
                     >
                         <Text style={styles.title}>Şahsi Hesap</Text>
                         <Text style={styles.money}>{MainStore.enjoyMoney.toFixed(2)}₺</Text>
+                        <Icon
+                            as={FontAwesome}
+                            name='user-secret'
+                            size={20}
+                            color={'white'}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.money_general}>
@@ -353,6 +367,13 @@ const Home = () => {
                     >
                         <Text style={styles.title}>Birikim Hesabı</Text>
                         <Text style={styles.money}>{MainStore.savingsMoney.toFixed(2)}₺</Text>
+                        <Icon
+                            as={MaterialCommunityIcons}
+                            name='scale-balance'
+                            size={20}
+                            color={'white'}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
 
                     {/* INVEST ACCOUNT BOX */}
@@ -365,6 +386,13 @@ const Home = () => {
                     >
                         <Text style={styles.title}>Yatırım Hesabı</Text>
                         <Text style={styles.money}>{MainStore.investMoney.toFixed(2)}₺</Text>
+                        <Icon
+                            as={FontAwesome}
+                            name='dollar'
+                            size={20}
+                            color={'white'}
+                            style={styles.icon}
+                        />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.bottom_area}>
@@ -526,9 +554,14 @@ const styles = StyleSheet.create({
     },
     money: {
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 22,
         alignSelf: 'flex-end',
         color: 'white'
+    },
+    icon: {
+        position: 'absolute',
+        bottom: 10,
+        left: 10
     },
     bottom_area: {
         margin: 20,

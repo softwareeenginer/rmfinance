@@ -343,7 +343,7 @@ const Home = () => {
                             setModal(true)
                             setWhichBalance(2)
                         }}
-                        style={[styles.box_view, { backgroundColor: '#eddcd2' }]}
+                        style={[styles.box_view, { backgroundColor: '#eddca2' }]}
                     >
                         <Text style={styles.title}>Şahsi Hesap</Text>
                         <Text style={styles.money}>{MainStore.enjoyMoney.toFixed(2)}₺</Text>
@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
     },
     modal_button_view: {
         flexDirection: 'row',
-        width: '40%',
+        width: '50%',
         justifyContent: 'space-between',
         marginTop: 5
     },
@@ -532,13 +532,16 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#c0c0c0'
     },
-    scroll: { flexGrow: 1 },
+    scroll: {
+        flexGrow: 1,
+        marginBottom: 50
+    },
     money_general: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '90%',
         alignSelf: 'center',
-        marginTop: 20
+        marginTop: 20,
     },
     box_view: {
         height: 200,
@@ -579,21 +582,24 @@ const styles = StyleSheet.create({
     left_text: {
         fontWeight: 'bold',
         fontSize: 20,
-        width: '80%'
+        width: '70%'
     },
     right_text_fatal: {
         fontWeight: 'bold',
         fontSize: 20,
-        width: '20%',
+        width: '30%',
         color: 'red'
     },
     right_text_success: {
         fontWeight: 'bold',
         fontSize: 20,
-        width: '20%',
+        width: '30%',
         color: 'green'
     },
-    total_view: { alignItems: 'center' },
+    total_view: { 
+        alignItems: 'center',
+        marginBottom:50
+     },
     total_text: {
         fontWeight: 'bold',
         color: '#808080',
